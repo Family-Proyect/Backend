@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core.mail import EmailMessage, BadHeaderError, send_mail, send_mass_mail
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
-
+import re
 # Create your views here.
 @login_required(login_url='/')
 def content(request):
@@ -30,7 +30,9 @@ def eliminar_galeria(request):
    #return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
 @login_required(login_url='/')
 def vista_buzon_entrada(request):
-    return render(request, 'notificaciones/buzon_entrada.html')
+    buzon = Contactanos.objects.filter(estado=True)
+    print(buzon)
+    return render(request, 'notificaciones/buzon_entrada.html',{'buzon':buzon})
 
 
 @login_required(login_url='/')
@@ -52,19 +54,20 @@ def vista_registrar_tema(request):
             #Esta podria ser la imagen que se muestra en el index del portal web
             imagen_tema_1 = Imagenes_Tema(id_tema=tema)
             imagen_tema_1.image = request.FILES['imagen1']
-            #imagen_tema_1.save()
+            imagen_tema_1.save()
             #Esta podria ser la imagen que se muestra una vez que le de click en el tema
             imagen_tema_2 = Imagenes_Tema(id_tema=tema)
             imagen_tema_2.image = request.FILES['imagen2']
-            #imagen_tema_2.save()
+            imagen_tema_2.save()
 
             #Video: Este se muestra una vez que entre en el tema
             vide_tema = Videos_Tema(id_tema=tema)
-            if bool(request.FILES.get('video')) == True:
-                vide_tema.video = request.FILES['video']
-                #vide_tema.save()
-
-
+            # if bool(request.FILES.get('video')) == True:
+            #     vide_tema.video = request.FILES['video']
+            #     #vide_tema.save()
+            if request.POST['url_video'] != '' :
+                vide_tema.url= youtube_url_validation(request.POST['url_video'] )              
+            vide_tema.save()
             #Que suba audio podria ser opcional (Casi a nadie le gusta estar oyendo audio de internet)
             messages.add_message(request, messages.SUCCESS, 'Tema guardado exitosamente.')
         except Exception as e :
@@ -74,6 +77,18 @@ def vista_registrar_tema(request):
         return redirect('registrar_tema') #registrar_tema es la version corta de views/registros/registrar_tema.html
 
     return render(request, 'views/registros/registrar_tema.html',{'categorias':categorias,"estado":Tema.Estado})
+
+def youtube_url_validation(url):
+    youtube_regex = (
+        r'(https?://)?(www\.)?'
+        '(youtube|youtu|youtube-nocookie)\.(com|be)/'
+        '(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})')
+    youtube_regex_match = re.findall(youtube_regex, url)
+    print(youtube_regex_match[0][-1])
+    if youtube_regex_match:
+        return youtube_regex_match[0][-1]
+    return youtube_regex_match
+
 
 @login_required(login_url='/')
 def view_modificar_tema(request):
@@ -117,7 +132,16 @@ def modificar_tema(request,pk):
                 imagenes_tema2 = Imagenes_Tema.objects.filter(id_tema=pk)[1]
                 imagenes_tema2.image=request.FILES['imagen2']
                 imagenes_tema2.save()
-            tema.save()     
+
+            #Video: Este se muestra una vez que entre en el tema
+            if request.POST['url_video'] != '' :
+                vide_tema = Videos_Tema.objects.filter(id_tema=pk)[0]
+                vide_tema.url= youtube_url_validation(request.POST['url_video'] )              
+                vide_tema.save()
+            tema.save()   
+
+
+
             messages.add_message(request, messages.SUCCESS, 'Modificacion exitosa.')
             return render(request, 'views/modificaciones/modificar_tema.html',{'temas':All_temas,'categorias':categorias,"estado":Tema.Estado,'tema':tema})
     except Exception as e:
@@ -274,6 +298,16 @@ def recibir_video(request):
         return render(request, 'views/galeria/view_galeria.html')
     return render(request, 'views/galeria/view_galeria.html')
 
+def send_email(request):
+    if request.method == "POST":
+        correo = request.POST['correo']
+        msg = request.POST['msg']
+        send_response(msg,correo)
+        return redirect('buzon_entrada')
+    return redirect('buzon_entrada')
+
+
+
 
 def notificaciones(informacion):
     usuarios = UserProfile.objects.all();
@@ -287,6 +321,21 @@ def notificaciones(informacion):
     message1 = (asunto, mensaje, 'familias.unidasEC@gmail.com',correos)
     try:
         send_mass_mail((message1,), fail_silently=False)
+        print("mensaje exitoso")
+    except BadHeaderError:
+        print("error")
+
+def send_response(informacion,correo):
+    usuarios = UserProfile.objects.all();
+    asunto = 'Familias Unidas Ec'
+    print(correo)
+    correos=[]
+    correos.append(correo)
+    # message1 = (asunto, mensaje, 'familias.unidasEC@gmail.com',correos)
+    try:
+        send_mail(asunto,informacion,'familias.unidasEC@gmail.com',[correo], fail_silently=False)
+        send_mail(asunto,informacion,'familias.unidasEC@gmail.com',['familias.unidasEC@gmail.com'], fail_silently=False)
+
         print("mensaje exitoso")
     except BadHeaderError:
         print("error")

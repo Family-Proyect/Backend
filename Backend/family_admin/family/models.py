@@ -48,9 +48,10 @@ class Imagenes_Tema(models.Model):
     id_tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
 
 class Videos_Tema(models.Model):
-    
     video = models.FileField(upload_to="video/",null=False,blank=True,verbose_name="Video del tema")
     id_tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
+    url = models.CharField(max_length=200,null=False,blank=True)
+
     
 class Audio_Tema(models.Model):
     audio = models.FileField(upload_to="audio/",null=False,blank=True,verbose_name="Audio del tema")
@@ -67,7 +68,32 @@ class Imagenes_galeria(models.Model):
 
 class Videos_galeria(models.Model):
     video = models.FileField(upload_to="video/",null=False,blank=True,verbose_name="Video del tema")
-    id_galeria = models.ForeignKey(Galeria, on_delete=models.CASCADE)
     
+    id_galeria = models.ForeignKey(Galeria, on_delete=models.CASCADE)
+
+class Testimonios(models.Model):
+    usuario = models.CharField(max_length=150,null=False,blank=False)
+    fecha= models.DateField(null=False, blank=True, default=datetime.now)
+    titulo = models.CharField(max_length=100,null=False,blank=False)
+    descripcion = models.TextField(max_length=100,null=False,blank=True)
+    image = models.ImageField(upload_to='image/',null=False,blank=True)
+    estado= models.BooleanField(default=True)#True:Aprobado, #False Rechazado
+
+class Tips(models.Model):
+    usuario = models.CharField(max_length=150,null=False,blank=False)
+    fecha= models.DateField(null=False, blank=True, default=datetime.now)
+    titulo = models.CharField(max_length=100,null=False,blank=False)
+    descripcion = models.TextField(max_length=300,null=False,blank=True)
+    image = models.ImageField(upload_to='image/',null=False,blank=True)
+    estado= models.BooleanField(default=True)#True:Visible, #False eliminado
+
+class Contactanos(models.Model):
+    usuario = models.CharField(max_length=150,null=False,blank=False)
+    fecha= models.DateField(null=False, blank=True, default=datetime.now)
+    titulo = models.CharField(max_length=100,null=False,blank=False)
+    descripcion = models.TextField(max_length=300,null=False,blank=True)
+    correo = models.CharField(max_length=150,null=False,blank=False)
+    estado= models.BooleanField(default=True)#True:Visible, #False eliminado
+
 
 
