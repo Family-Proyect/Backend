@@ -9,7 +9,7 @@ Integrantes:
 
 ## Frameworks
 ```
-Frontend: Angular V10 and Ionic
+Frontend: Angular V10
 Backend: Django
+Movil: Ionic
 ```
-Prueba
