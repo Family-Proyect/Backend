@@ -81,7 +81,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Registrar:</h6>
             <a class="collapse-item" href="{% url 'registrar_tema' %}">Registrar tema</a>
-            <a class="collapse-item" href="{% url 'registrar_tema' %}">Registrar tips</a>
+            <!-- <a class="collapse-item" href="">Registrar tips</a> -->
 
           </div>
         </div>
@@ -137,53 +137,24 @@
           </div>
         </div>
       </li>
-
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsejerias" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-calendar-check"></i>          
+            <span>Consejerias</span>
+        </a>
+        <div id="collapseConsejerias" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Consejerias:</h6>
+            <a class="collapse-item" href="{% url 'registrar_consejeria' %}">Registrar consejeria</a>
+            <a class="collapse-item" href="{% url 'modificarConsejeria' %}">Gestionar consejeria</a>
+          </div>
+        </div>
+      </li>
       <!-- Divider -->
       <hr class="sidebar-divider">
       {% if request.user.tipo == 'C'  %}
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Consejerias
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Horarios</span>
-        </a>
-
-        <!-- <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
-          </div>
-        </div>
-      </li> -->
-
-      <!-- Nav Item - Charts -->
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li> -->
-
-      <!-- Nav Item - Tables -->
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li> -->
-
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
+     
+     
       {% endif %}
 
       <!-- Sidebar Toggler (Sidebar) -->
@@ -248,7 +219,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                <span class="badge badge-danger badge-counter"></span>
               </a>
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
@@ -297,7 +268,7 @@
               <a class="nav-link dropdown-toggle"  id="messagesDropdown" href="{% url 'buzon_entrada' %}" >
                 <i class="fas fa-envelope fa-fw"></i>
                 <!-- Counter - Messages -->
-                <span class="badge badge-danger badge-counter">7</span>
+                <span class="badge badge-danger badge-counter"></span>
               </a>
               <!-- Dropdown - Messages -->
               <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">

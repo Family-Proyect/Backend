@@ -37,7 +37,7 @@ class Tema(models.Model):
     titulo = models.CharField(max_length=100,null=False,blank=False,verbose_name="Titulo del tema")
     descripcion = models.TextField(max_length="900",null=False,blank=True,verbose_name="Descripcion del tema")
     fecha= models.DateField(null=False, blank=True, default=datetime.now)
-
+    estado= models.SmallIntegerField(default=1)
     def __str__(self):              
         return self.titulo
 
@@ -77,7 +77,7 @@ class Testimonios(models.Model):
     titulo = models.CharField(max_length=100,null=False,blank=False)
     descripcion = models.TextField(max_length=100,null=False,blank=True)
     image = models.ImageField(upload_to='image/',null=False,blank=True)
-    estado= models.BooleanField(default=True)#True:Aprobado, #False Rechazado
+    estado= models.SmallIntegerField(default=1)
 
 class Tips(models.Model):
     usuario = models.CharField(max_length=150,null=False,blank=False)
@@ -85,7 +85,7 @@ class Tips(models.Model):
     titulo = models.CharField(max_length=100,null=False,blank=False)
     descripcion = models.TextField(max_length=300,null=False,blank=True)
     image = models.ImageField(upload_to='image/',null=False,blank=True)
-    estado= models.BooleanField(default=True)#True:Visible, #False eliminado
+    estado= models.SmallIntegerField(default=1)
 
 class Contactanos(models.Model):
     usuario = models.CharField(max_length=150,null=False,blank=False)
@@ -93,7 +93,14 @@ class Contactanos(models.Model):
     titulo = models.CharField(max_length=100,null=False,blank=False)
     descripcion = models.TextField(max_length=300,null=False,blank=True)
     correo = models.CharField(max_length=150,null=False,blank=False)
-    estado= models.BooleanField(default=True)#True:Visible, #False eliminado
+    estado= models.SmallIntegerField(default=1)
 
+class Consejeria(models.Model):
+    usuario = models.CharField(max_length=150,null=False,blank=False)
+    empieza= models.DateTimeField(null=False, blank=True)
+    termina= models.DateTimeField(null=False, blank=True)
+    tema = models.CharField(max_length=100,null=False,blank=False)
+    correo = models.CharField(max_length=150,null=False,blank=False)
+    estado= models.SmallIntegerField(default=1)
 
 

@@ -17,7 +17,6 @@ def content(request):
 def view_eliminar_galeria(request):
     imagenes = Imagenes_galeria.objects.filter(id_galeria=1)#solo hay una galeria
     categorias = Categoria_Tema.objects.all()
-
     print(imagenes)
     return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
 @login_required(login_url='/')
@@ -30,9 +29,49 @@ def eliminar_galeria(request):
    #return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
 @login_required(login_url='/')
 def vista_buzon_entrada(request):
-    buzon = Contactanos.objects.filter(estado=True)
-    print(buzon)
+    buzon = Contactanos.objects.filter(estado=1)#false mostrar, #True ocultar
     return render(request, 'notificaciones/buzon_entrada.html',{'buzon':buzon})
+@login_required(login_url='/')
+def vista_registrar_consejeria(request):
+    if request.method == 'POST':
+        username = None
+        username = request.user.username
+        consejeria = Consejeria(tema=request.POST['tema'],usuario=username,correo="chjoguer",empieza=request.POST['inicio'],termina=request.POST['termina'])
+        consejeria.save()
+    return render(request, 'views/registros/registrar_consejeria.html')
+
+@login_required(login_url='/')
+def vista_modificar_consejeria(request):
+    consejeria = Consejeria.objects.all().filter(estado=1)
+    return render(request, 'views/modificaciones/modificar_consejeria.html',{'consejerias':consejeria})
+
+@login_required(login_url='/')
+def modificar_consejeria(request):
+    consejeria = Consejeria.objects.get(id=request.POST['id'])
+    if request.POST['tema']!='':
+        consejeria.tema=request.POST['tema']
+    if request.POST['inicio']!='':
+        consejeria.empieza=request.POST['inicio']
+    if request.POST['termina']!='':
+        consejeria.termina=request.POST['termina']
+    consejeria.save()
+
+    return redirect('modificarConsejeria')
+
+@login_required(login_url='/')
+def eliminar_consejeria(request):
+    con = Consejeria.objects.get(id=request.POST['id_consejeria'])
+    con.estado=0
+    con.save()
+    return redirect('modificarConsejeria')
+
+@login_required(login_url='/')
+def eliminar_mensaje_buzon(request):
+    msg = Contactanos.objects.get(id=request.POST['id_mensaje'])
+    msg.estado=0
+    msg.save()
+    return redirect('buzon_entrada')
+
 
 
 @login_required(login_url='/')
@@ -339,4 +378,23 @@ def send_response(informacion,correo):
         print("mensaje exitoso")
     except BadHeaderError:
         print("error")
-    
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        print(user)
+        print(request.data)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token':token.key,
+            'user_id': user.pk,
+            'email': user.email,
+            'usuario':user.username,
+            'tipo':user.tipo
+        })

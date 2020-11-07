@@ -104,6 +104,20 @@ def get_imagesGaleria(request):
         img_galeria= Imagenes_galeria.objects.all().values('image')
         print(img_galeria)
         return JsonResponse(list(img_galeria), safe=False)
+
+
+
+def get_Consejerias(request):
+    if request.method=='GET':
+        consejeria = Consejeria.objects.all()
+        consejeria2 = Consejeria.objects.filter(estado=1).values()
+
+        
+
+        return JsonResponse(list(consejeria2), safe=False)
+
+
+
 @csrf_exempt
 def post_contactanos(request):
     if request.method=="POST":
