@@ -145,6 +145,19 @@ def postCreateTipoSugerencia(request):
         return HttpResponse(status=200)
     return HttpResponse(status=404)
 
+#API de Servicios de registrar ususario
+@csrf_exempt
+def register(request):
+    if request.method=='POST':
+        response = json.loads(request.body)
+        #Aqui creo el usuario
+        print(response["password"])
+        user = UserProfile(username=response["username"],first_name=response["nombre"],last_name=response["apellido"],email=response["correo"],tipo="U")
+        user.set_password(response["password"])
+        user.save()
+        return HttpResponse(status=200)
+    return HttpResponse(status=404)
+
 
 
 

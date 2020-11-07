@@ -15,6 +15,7 @@ api_patterns = [
     path('images_galeria/',get_imagesGaleria),
     path('contactanos/',post_contactanos),
     path('get_consejerias/',get_Consejerias),
+    path('register/',register),
 
 ]
 
@@ -55,6 +56,6 @@ urlpatterns = [
      path(r'api-token-auth/', CustomAuthToken.as_view()),
      path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
      #api
-     path('api/',include(api_patterns))
+     path('api/',include(api_patterns)),
 
 ]
