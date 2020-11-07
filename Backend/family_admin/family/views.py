@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core.mail import EmailMessage, BadHeaderError, send_mail, send_mass_mail
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
-
+import re
 # Create your views here.
 @login_required(login_url='/')
 def content(request):
@@ -17,7 +17,6 @@ def content(request):
 def view_eliminar_galeria(request):
     imagenes = Imagenes_galeria.objects.filter(id_galeria=1)#solo hay una galeria
     categorias = Categoria_Tema.objects.all()
-
     print(imagenes)
     return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
 @login_required(login_url='/')
@@ -30,7 +29,49 @@ def eliminar_galeria(request):
    #return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
 @login_required(login_url='/')
 def vista_buzon_entrada(request):
-    return render(request, 'notificaciones/buzon_entrada.html')
+    buzon = Contactanos.objects.filter(estado=1)#false mostrar, #True ocultar
+    return render(request, 'notificaciones/buzon_entrada.html',{'buzon':buzon})
+@login_required(login_url='/')
+def vista_registrar_consejeria(request):
+    if request.method == 'POST':
+        username = None
+        username = request.user.username
+        consejeria = Consejeria(tema=request.POST['tema'],usuario=username,correo="chjoguer",empieza=request.POST['inicio'],termina=request.POST['termina'])
+        consejeria.save()
+    return render(request, 'views/registros/registrar_consejeria.html')
+
+@login_required(login_url='/')
+def vista_modificar_consejeria(request):
+    consejeria = Consejeria.objects.all().filter(estado=1)
+    return render(request, 'views/modificaciones/modificar_consejeria.html',{'consejerias':consejeria})
+
+@login_required(login_url='/')
+def modificar_consejeria(request):
+    consejeria = Consejeria.objects.get(id=request.POST['id'])
+    if request.POST['tema']!='':
+        consejeria.tema=request.POST['tema']
+    if request.POST['inicio']!='':
+        consejeria.empieza=request.POST['inicio']
+    if request.POST['termina']!='':
+        consejeria.termina=request.POST['termina']
+    consejeria.save()
+
+    return redirect('modificarConsejeria')
+
+@login_required(login_url='/')
+def eliminar_consejeria(request):
+    con = Consejeria.objects.get(id=request.POST['id_consejeria'])
+    con.estado=0
+    con.save()
+    return redirect('modificarConsejeria')
+
+@login_required(login_url='/')
+def eliminar_mensaje_buzon(request):
+    msg = Contactanos.objects.get(id=request.POST['id_mensaje'])
+    msg.estado=0
+    msg.save()
+    return redirect('buzon_entrada')
+
 
 
 @login_required(login_url='/')
@@ -52,19 +93,20 @@ def vista_registrar_tema(request):
             #Esta podria ser la imagen que se muestra en el index del portal web
             imagen_tema_1 = Imagenes_Tema(id_tema=tema)
             imagen_tema_1.image = request.FILES['imagen1']
-            #imagen_tema_1.save()
+            imagen_tema_1.save()
             #Esta podria ser la imagen que se muestra una vez que le de click en el tema
             imagen_tema_2 = Imagenes_Tema(id_tema=tema)
             imagen_tema_2.image = request.FILES['imagen2']
-            #imagen_tema_2.save()
+            imagen_tema_2.save()
 
             #Video: Este se muestra una vez que entre en el tema
             vide_tema = Videos_Tema(id_tema=tema)
-            if bool(request.FILES.get('video')) == True:
-                vide_tema.video = request.FILES['video']
-                #vide_tema.save()
-
-
+            # if bool(request.FILES.get('video')) == True:
+            #     vide_tema.video = request.FILES['video']
+            #     #vide_tema.save()
+            if request.POST['url_video'] != '' :
+                vide_tema.url= youtube_url_validation(request.POST['url_video'] )              
+            vide_tema.save()
             #Que suba audio podria ser opcional (Casi a nadie le gusta estar oyendo audio de internet)
             messages.add_message(request, messages.SUCCESS, 'Tema guardado exitosamente.')
         except Exception as e :
@@ -74,6 +116,18 @@ def vista_registrar_tema(request):
         return redirect('registrar_tema') #registrar_tema es la version corta de views/registros/registrar_tema.html
 
     return render(request, 'views/registros/registrar_tema.html',{'categorias':categorias,"estado":Tema.Estado})
+
+def youtube_url_validation(url):
+    youtube_regex = (
+        r'(https?://)?(www\.)?'
+        '(youtube|youtu|youtube-nocookie)\.(com|be)/'
+        '(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})')
+    youtube_regex_match = re.findall(youtube_regex, url)
+    print(youtube_regex_match[0][-1])
+    if youtube_regex_match:
+        return youtube_regex_match[0][-1]
+    return youtube_regex_match
+
 
 @login_required(login_url='/')
 def view_modificar_tema(request):
@@ -117,7 +171,16 @@ def modificar_tema(request,pk):
                 imagenes_tema2 = Imagenes_Tema.objects.filter(id_tema=pk)[1]
                 imagenes_tema2.image=request.FILES['imagen2']
                 imagenes_tema2.save()
-            tema.save()     
+
+            #Video: Este se muestra una vez que entre en el tema
+            if request.POST['url_video'] != '' :
+                vide_tema = Videos_Tema.objects.filter(id_tema=pk)[0]
+                vide_tema.url= youtube_url_validation(request.POST['url_video'] )              
+                vide_tema.save()
+            tema.save()   
+
+
+
             messages.add_message(request, messages.SUCCESS, 'Modificacion exitosa.')
             return render(request, 'views/modificaciones/modificar_tema.html',{'temas':All_temas,'categorias':categorias,"estado":Tema.Estado,'tema':tema})
     except Exception as e:
@@ -274,6 +337,16 @@ def recibir_video(request):
         return render(request, 'views/galeria/view_galeria.html')
     return render(request, 'views/galeria/view_galeria.html')
 
+def send_email(request):
+    if request.method == "POST":
+        correo = request.POST['correo']
+        msg = request.POST['msg']
+        send_response(msg,correo)
+        return redirect('buzon_entrada')
+    return redirect('buzon_entrada')
+
+
+
 
 def notificaciones(informacion):
     usuarios = UserProfile.objects.all();
@@ -290,4 +363,38 @@ def notificaciones(informacion):
         print("mensaje exitoso")
     except BadHeaderError:
         print("error")
-    
+
+def send_response(informacion,correo):
+    usuarios = UserProfile.objects.all();
+    asunto = 'Familias Unidas Ec'
+    print(correo)
+    correos=[]
+    correos.append(correo)
+    # message1 = (asunto, mensaje, 'familias.unidasEC@gmail.com',correos)
+    try:
+        send_mail(asunto,informacion,'familias.unidasEC@gmail.com',[correo], fail_silently=False)
+        send_mail(asunto,informacion,'familias.unidasEC@gmail.com',['familias.unidasEC@gmail.com'], fail_silently=False)
+
+        print("mensaje exitoso")
+    except BadHeaderError:
+        print("error")
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        print(user)
+        print(request.data)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token':token.key,
+            'user_id': user.pk,
+            'email': user.email,
+            'usuario':user.username,
+            'tipo':user.tipo
+        })
