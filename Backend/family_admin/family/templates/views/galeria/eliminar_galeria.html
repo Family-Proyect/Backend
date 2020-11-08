@@ -37,6 +37,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Imagen</th>
+                        <th>Fecha</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -44,6 +45,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Imagen</th>
+                        <th>Fecha</th>
                         <th>Opciones</th>
                     </tr>
                 </tfoot>
@@ -56,12 +58,19 @@
                                     <a id="previs" href="#">{{imagen.image}}<span id="spn"><img id="im"src="{% get_media_prefix %}{{imagen.image}}" alt="image" height="100" /></span></a>
                                 </div>
                         </td>
+                        <td>     
+                            <div id="hover_img">
+                                <a id="previs" href="#">{{imagen.fecha}}<span id="spn"><img id="im"src="{% get_media_prefix %}{{imagen.image}}" alt="image" height="100" /></span></a>
+                            </div>
+                        </td>   
                         <td>
                             <button class="btn btn-danger btn-circle btn-sm " type="button" data-galeria="{{imagen.id}}"
                                 href="" data-toggle="modal" data-target="#ConfirmModalGaleria">
                                 <i class="fas fa-trash"></i>
                             </button>
-                    </td>                       
+                    </td>
+                    
+                        
                     </tr>
                     {% endfor %}
 
