@@ -30,31 +30,10 @@
   <div class="card-body">
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      
       <div class="form-group row">
-        <label class="col-md-3 col-form-label" for="select1">Categoria del tema</label>
+        <label class="col-md-3 col-form-label" for="text-input">Titulo</label>
         <div class="col-md-9">
-          <select class="form-control" id="select1" name="categoria" required>
-            <option selected value="0">Seleccione la categoria</option>
-            {% for categoria in categorias %}
-            <option value="{{categoria.nombre_categoria}}">{{categoria.nombre_categoria}}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-md-3 col-form-label" for="text-input">Titulo </label>
-        <div class="col-md-9">
-          <input class="form-control" id="text-input" type="text" name="titulo" placeholder="Titulo del tema" required>
-        </div>
-      </div>
-
-
-      <div class="form-group row">
-        <label class="col-md-3 col-form-label" for="datepicker">Fecha</label>
-        <div class="col-md-9">
-          <input class="form-control" id="datepicker" type="date" name="fecha" placeholder="date" required>
-          <!-- <span class="help-block">Please enter a valid date</span> -->
+          <input class="form-control" id="text-input" type="text" name="titulo" placeholder="Titulo del tip" required>
         </div>
       </div>
 
@@ -65,12 +44,12 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-md-3 col-form-label" for="estado">Estado del tema</label>
+        <label class="col-md-3 col-form-label" for="estado">Estado del tips</label>
         <div class="col-md-9">
           <select class="form-control" id="select1" name="estado" required>
-            <option value="0">Seleccione el estado del tema</option>
+            <option value="" selected disabled>Seleccione el estado del tips</option>
             <option value="1">Aprobado</option>
-            <option value="2">Pendiente</option>
+            <option value="0">Pendiente</option>
 
           </select>
         </div>
@@ -100,23 +79,6 @@
                 <input id="file-input" type="file" name="imagen1" accept="image/*" required>
               </div>
             </div> 
-            
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="imagen2"><strong> Seleccione la imagen 2</strong></label>
-              <div class="col-md-9">
-                <input id="file-input" type="file" name="imagen2" accept="image/*" required>
-              </div>
-            </div>
-
-            <strong>Subir Video</strong> 
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="video"><strong> Seleccione el video</strong></label>
-              <div class="col-md-9">
-                <input id="file-input" type="file" name="video" accept="video/*" >
-              </div>
-            </div>
-
-
           </div>
         </div>
       </div>

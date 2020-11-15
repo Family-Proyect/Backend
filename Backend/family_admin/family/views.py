@@ -214,6 +214,76 @@ def eliminar_tema_p(request):
         categorias = Categoria_Tema.objects.all()
     return redirect('eliminar_tema')
 
+
+def view_registrar_tips(request):
+    if(request.method == 'POST'):
+        try:
+            recomendacion = Tips(estado=request.POST['estado'],
+                            usuario=request.user,
+                            titulo=request.POST['titulo'],
+                            descripcion=request.POST['descripcion'],
+                            )
+            if bool(request.FILES.get('imagen1')) == True :
+                print("image tips")
+                recomendacion.image = request.FILES['imagen1']
+            recomendacion.save()
+            messages.add_message(request, messages.SUCCESS, 'Tip guardado exitosamente.')
+        except Exception as e :
+            print("Errors -> ", e)
+            messages.add_message(request,messages.ERROR,'Error al guardar el tip.')
+        return redirect('registrar_tema')
+    return render(request, 'views/registros/registrar_tips.html')
+
+@login_required(login_url='/')
+def view_modificar_tips(request):
+    All_tips = Tips.objects.all()
+    return render(request, 'views/modificaciones/modificar_tips.html',{'tips':All_tips})
+
+@csrf_exempt
+@login_required(login_url='/')
+def modificar_tips(request,pk):
+    All_tips = Tips.objects.all().order_by('-fecha')
+    try:
+        tip = Tips.objects.get(id=pk)
+        if request.method == 'POST':
+            tip.titulo= request.POST['titulo']
+            tip.usuario=str(request.user)
+            tip.descripcion=request.POST['descripcion']
+            if request.POST['fecha']!="":
+                tip.fecha=request.POST['fecha']
+                print("X->",request.POST['fecha'])
+            if request.POST.get('estado')!=None:
+                tip.estado=request.POST['estado']
+            print("X->",request.POST.get('estado'))
+        #Verifico si envian imagen, si existe procedo a guardar            
+            if bool(request.FILES.get('imagen1')) == True :
+                print("img1")
+                tip.image=request.FILES['imagen1']
+            tip.save()
+            messages.add_message(request, messages.SUCCESS, 'Modificacion exitosa.')
+
+        return render(request, 'views/modificaciones/modificar_tips.html',{'tips':All_tips,'tip':tip})
+    except Exception as e:
+        print("Error ->", e)
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la modificacion.')
+    return render(request, 'views/modificaciones/modificar_tips.html',{'tips':All_tips})
+
+@login_required(login_url='/')
+def view_eliminar_tips(request):
+    All_tips = Tips.objects.all()
+    return render(request, 'views/eliminacion/eliminar_tips.html',{'tips':All_tips})
+
+@login_required(login_url='/')
+def eliminar_tips_p(request):
+    try:
+        tip = Tips.objects.get(id=request.POST['tip'])
+        tip.delete()
+        messages.add_message(request, messages.SUCCESS, 'Tip eliminado exitosamente.')
+    except Exception as e:
+        print(e)
+        messages.add_message(request,messages.ERROR,'Error al eliminar el tip.')
+    return redirect('eliminar_tips')
+
 @login_required(login_url='/')
 def view_galeria(request):
     return render(request, 'views/galeria/view_galeria.html')

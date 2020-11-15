@@ -33,6 +33,12 @@ urlpatterns = [
      path('tema_modificar/<int:pk>', modificar_tema, name='modificar_tema_pk'),
      path('tema_eliminar', view_eliminar_tema, name='eliminar_tema'),
      path('eliminar_tema_p', eliminar_tema_p, name='eliminar_tema_p'),
+    #Tipos-Recomendaciones
+     path('tips', view_registrar_tips, name='registrar_tips'),
+     path('tips_modificar', view_modificar_tips, name='modificar_tips'),
+     path('tips_modificar/<int:pk>', modificar_tips, name='modificar_tips_pk'),
+     path('tips_eliminar', view_eliminar_tips, name='eliminar_tips'),
+     path('eliminar_tips_p', eliminar_tips_p, name='eliminar_tips_p'),
      #galeria
      path('galeria', view_galeria, name='galeria'),
      path('galeria_eliminar', view_eliminar_galeria, name='hola'),

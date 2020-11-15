@@ -81,7 +81,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Registrar:</h6>
             <a class="collapse-item" href="{% url 'registrar_tema' %}">Registrar tema</a>
-            <!-- <a class="collapse-item" href="">Registrar tips</a> -->
+            <a class="collapse-item" href="{% url 'registrar_tips' %}">Registrar tips </a>
 
           </div>
         </div>
@@ -100,6 +100,8 @@
             
             <h6 class="collapse-header">Modificar:</h6>
             <a class="collapse-item" href="{% url 'modificar_tema' %}">Modificar tema</a>
+            <a class="collapse-item" href="{% url 'modificar_tips' %}">Modificar tips</a>
+
             <!-- <a class="collapse-item" href="cards.html">Modificar galeria</a> -->
           </div>
         </div>
@@ -117,6 +119,8 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Eliminar:</h6>
         <a class="collapse-item" href="{% url 'eliminar_tema' %}">Eliminar tema</a>
+        <a class="collapse-item" href="{% url 'eliminar_tips' %}">Eliminar tips</a>
+
         <!-- <a class="collapse-item" href="cards.html">Eliminar galeria</a> -->
       </div>
     </div>
