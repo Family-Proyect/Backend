@@ -20,6 +20,7 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework.response import Response
 from django.core import serializers
 from django.http import HttpResponse
+from django.contrib.auth import authenticate
 
 
 def get_temasPrincipales(request):
@@ -160,6 +161,21 @@ def register(request):
 
 @csrf_exempt
 def login(request):
-    return HttpResponse(status=200)         
-
-
+    if request.method == "POST":
+        response = json.loads(request.body)
+        username = response["username"]
+        password = response["password"]
+        if(username!=None and password!=None):
+            usuario = authenticate(username=username, password=password)
+            #usuario = UserProfile.objects.filter(username=username, password=password)
+            print(usuario)
+            print((UserProfile.objects.filter(username=username, password=password)).query)
+            print(username)
+            print(password)
+            if(usuario):
+                return JsonResponse({"status":"true"}, safe=False)
+            else:
+                return JsonResponse({"status":"false"}, safe=False)
+            return HttpResponse(status=404)
+        return HttpResponse(status=404)
+    return HttpResponse(status=404)
