@@ -158,7 +158,8 @@ def register(request):
         return HttpResponse(status=200)
     return HttpResponse(status=404)
 
-
-
+@csrf_exempt
+def login(request):
+    return HttpResponse(status=200)         
 
 
