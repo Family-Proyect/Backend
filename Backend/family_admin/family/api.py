@@ -167,7 +167,6 @@ def login(request):
         password = response["password"]
         if(username!=None and password!=None):
             usuario = authenticate(username=username, password=password)
-            #usuario = UserProfile.objects.filter(username=username, password=password)
             if(usuario):
                 return JsonResponse({"status":"true"}, safe=False)
             else:

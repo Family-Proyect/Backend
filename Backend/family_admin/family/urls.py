@@ -17,7 +17,7 @@ api_patterns = [
     path('get_consejerias/',get_Consejerias),
     path('register/',register),
     path('login/',login),
-
+    path('getPrincipalesTemas/',get_temasPrincipales),
 ]
 
 
