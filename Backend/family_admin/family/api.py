@@ -168,10 +168,6 @@ def login(request):
         if(username!=None and password!=None):
             usuario = authenticate(username=username, password=password)
             #usuario = UserProfile.objects.filter(username=username, password=password)
-            print(usuario)
-            print((UserProfile.objects.filter(username=username, password=password)).query)
-            print(username)
-            print(password)
             if(usuario):
                 return JsonResponse({"status":"true"}, safe=False)
             else:
