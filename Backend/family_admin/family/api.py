@@ -174,3 +174,11 @@ def login(request):
             return HttpResponse(status=404)
         return HttpResponse(status=404)
     return HttpResponse(status=404)
+
+@csrf_exempt
+def get_scrollGaleria(request):
+    if request.method=='GET':
+        page = int(request.GET.get("_page"))
+        limit = int(request.GET.get("_limit"))
+        img_galeria= Imagenes_galeria.objects.all().values('image')[page:limit]
+        return JsonResponse(list(img_galeria), safe=False)

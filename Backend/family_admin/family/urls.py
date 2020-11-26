@@ -18,6 +18,7 @@ api_patterns = [
     path('register/',register),
     path('login/',login),
     path('getPrincipalesTemas/',get_temasPrincipales),
+    path('galeria_scroll/',get_scrollGaleria),
 ]
 
 
