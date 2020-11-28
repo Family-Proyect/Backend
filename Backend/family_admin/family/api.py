@@ -21,6 +21,7 @@ from rest_framework.response import Response
 from django.core import serializers
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
+from django.core.mail import EmailMessage, BadHeaderError, send_mail, send_mass_mail
 
 
 def get_temasPrincipales(request):
@@ -182,3 +183,45 @@ def get_scrollGaleria(request):
         limit = int(request.GET.get("_limit"))
         img_galeria= Imagenes_galeria.objects.all().values('image')[page:limit]
         return JsonResponse(list(img_galeria), safe=False)
+
+@csrf_exempt
+def recuperar_contrasenia(request):
+    if request.method == 'POST':
+        response = json.loads(request.body)
+        correo = response["correo"]
+        try:
+            usuario = UserProfile.objects.get(email=correo)
+            print(usuario)
+        except UserProfile.DoesNotExist:
+            usuario = None
+            messages.add_message(request,messages.ERROR,'El correo ingresado no existe.!!')
+            return JsonResponse({"status":"false"}, safe=False)
+        
+        new_password = UserProfile.objects.make_random_password()
+        usuario.set_password(new_password)
+        usuario.save()
+
+        asunto = 'Cambio de contraseña Familias Unidas Ec'
+        mensaje = 'Usted ha solicitado recuperación de contraseña su contraseña nueva es la siguiente: '+ new_password +" asegurese de cambiarla luego."
+        nombres = usuario.username
+
+        if nombres != '' and len(correo.split('@')) == 2 and mensaje != '':
+            textomensaje = '<br>'
+            lista = mensaje.split('\n')
+            c = 0
+            for i in lista:
+                textomensaje += i+'</br>'
+                c+=1
+                if len(lista)  > c :
+                    textomensaje += '<br>'
+            msj = '<p><strong>IPSP :</strong>'+nombres+'</p><p><strong>Correo: </strong>'+correo+'</p><strong>Mensaje: </strong>'+textomensaje+'</p>'
+            msj2 = msj+'<br/><br/><br/><p>Usted esta realizando el proceso de recuperacion de contraseña.</p><p><strong>NO RESPONDER A ESTE MENSAJE</strong>, nosotros nos pondremos en conacto con usted de ser necesario.</p><br/>'
+            try:
+                
+                send_mail('Contactanos: '+asunto, msj,'familias.unidasEC@gmail.com', ['familias.unidasEC@gmail.com'], fail_silently=False, html_message = '<html><body>'+msj+'</body></html>')
+                send_mail('Correo enviado: '+asunto, msj2, 'familias.unidasEC@gmail.com', [correo], fail_silently=False, html_message= '<html><body>'+msj2+'</body></html>')
+            except BadHeaderError:
+                return JsonResponse({"status":"false"}, safe=False)
+            return JsonResponse({"status":"true"}, safe=False)
+
+    return JsonResponse({"status":"false"}, safe=False)
