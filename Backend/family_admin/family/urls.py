@@ -19,7 +19,8 @@ api_patterns = [
     path('login/',login),
     path('getPrincipalesTemas/',get_temasPrincipales),
     path('galeria_scroll/',get_scrollGaleria),
-    path('recuperar_contrasenia/', recuperar_contrasenia,name='reset_pass'),#method
+    path('recuperar_contrasenia/', recuperar_contrasenia,name='reset_pass'),
+    path('registro/', registro,name='registro'),
 ]
 
 
