@@ -16,6 +16,8 @@ api_patterns = [
     path('contactanos/',post_contactanos),
     path('get_consejerias/',get_Consejerias),
     path('register/',register),
+    path('tips/',get_tips),
+
 
 ]
 

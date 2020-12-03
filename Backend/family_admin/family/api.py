@@ -22,6 +22,12 @@ from django.core import serializers
 from django.http import HttpResponse
 
 
+def get_tips(request):
+    if request.method == 'GET':
+        tips = Tips.objects.filter(estado=1).order_by('-fecha')
+        return JsonResponse(list(tips.values()),safe=False)
+
+
 def get_temasPrincipales(request):
     if request.method=='GET':
         response = dict()
