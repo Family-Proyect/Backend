@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'clear_cache',
 
 ]
 
@@ -96,9 +97,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dbfamily',
 	    'USER': 'root',
-	    'PASSWORD': '23198',
+	    'PASSWORD': '',
 	    'HOST': 'localhost',
-	    'PORT': '3306',
+	    'PORT': '3308',
     }
 }
 
