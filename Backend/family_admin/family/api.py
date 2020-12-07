@@ -231,7 +231,7 @@ def registro(request):
     if request.method == 'POST':
         response = json.loads(request.body)
         #verificar ususario
-        if UserProfile.objects.filter(username=response["usuario"]).exists() and UserProfile.objects.filter(email=response["correo"]).exists():
+        if UserProfile.objects.filter(username=response["usuario"]).exists() or UserProfile.objects.filter(email=response["correo"]).exists():
             return JsonResponse({"status":"false"}, safe=False)
         else:
             user = UserProfile(username=response["usuario"],email=response["correo"],tipo="U")
