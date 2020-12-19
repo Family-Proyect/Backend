@@ -11,6 +11,10 @@ from datetime import datetime
 
 class UserProfile(AbstractUser):
     tipo = models.CharField(max_length=2,null=False,blank=False,default='E',verbose_name='Tipos de usuario')# A:administrador, E: editor, C: consejero
+    # consejeria = models.CharField(max_length=300,null=False,blank=False,default='None')# A:administrador, E: editor, C: consejero
+    sexo = models.CharField(max_length=100,null=False,blank=True)# A:administrador, E: editor, C: consejero
+    edad = models.CharField(max_length=100,null=False,blank=True )# A:administrador, E: editor, C: consejero
+    image = models.ImageField(upload_to='image/',null=False,blank=True,verbose_name="Imagen del perfil")
 
     def say_hello(self):
         return "Hello, my name is {}".format(self.first_name)
@@ -103,5 +107,11 @@ class Consejeria(models.Model):
     tema = models.CharField(max_length=100,null=False,blank=False)
     correo = models.CharField(max_length=150,null=False,blank=False)
     estado= models.SmallIntegerField(default=1)
+
+class Nosotros(models.Model):
+    nombre_completo =models.CharField(max_length=350,null=False,blank=False)
+    estudios =models.CharField(max_length=250,null=False,blank=False)
+    image = models.ImageField(upload_to='image/',null=False,blank=True)
+
 
 

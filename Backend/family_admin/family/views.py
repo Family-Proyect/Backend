@@ -19,6 +19,9 @@ def view_eliminar_galeria(request):
     categorias = Categoria_Tema.objects.all()
     print(imagenes)
     return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
+
+
+
 @login_required(login_url='/')
 def eliminar_galeria(request):
     imagenes = Imagenes_galeria.objects.filter(id_galeria=1) #solo hay una galeria
@@ -27,10 +30,29 @@ def eliminar_galeria(request):
     return redirect('hola')
 
    #return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
+
+@login_required(login_url='/')
+def eliminar_testimonios(request):
+    testimonios = Testimonios.objects.all() #solo hay una galeria
+    return render(request, 'views/eliminacion/eliminar_testimonios.html',{'testimonios':testimonios})
+
+@login_required(login_url='/')
+def eliminar_testimonio_p(request):
+    try:
+        testi = Testimonios.objects.get(id=request.POST['testimonio'])
+        testi.delete()
+        messages.add_message(request, messages.SUCCESS, 'Testimonio eliminado exitosamente.')
+    except Exception as e:
+        print(e)
+        messages.add_message(request,messages.ERROR,'Error al eliminar el Testimonio.')
+    return redirect('eliminarTestimonio')
+
 @login_required(login_url='/')
 def vista_buzon_entrada(request):
     buzon = Contactanos.objects.filter(estado=1)#false mostrar, #True ocultar
     return render(request, 'notificaciones/buzon_entrada.html',{'buzon':buzon})
+
+    
 @login_required(login_url='/')
 def vista_registrar_consejeria(request):
     if request.method == 'POST':
@@ -291,9 +313,10 @@ def view_galeria(request):
 
 
 @csrf_exempt
-def recuperar_contrasenia(request):
+def recuperar_contrasenia_admin(request):
     if request.method == 'POST':
         #response = json.loads(request.body)
+        print(request.POST['correo'])
         try:
             usuario = UserProfile.objects.get(email=request.POST['correo'])
             print("validando correo")
@@ -320,7 +343,7 @@ def recuperar_contrasenia(request):
                 c+=1
                 if len(lista)  > c :
                     textomensaje += '<br>'
-            msj = '<p><strong>IPSP :</strong>'+nombres+'</p><p><strong>Correo: </strong>'+mail+'</p><strong>Mensaje: </strong>'+textomensaje+'</p>'
+            msj = '<p><strong>Usuario :</strong>'+nombres+'</p><p><strong>Correo: </strong>'+mail+'</p><strong>Mensaje: </strong>'+textomensaje+'</p>'
             msj2 = msj+'<br/><br/><br/><p>Usted esta realizando el proceso de recuperacion de contraseña.</p><p><strong>NO RESPONDER A ESTE MENSAJE</strong>, nosotros nos pondremos en conacto con usted de ser necesario.</p><br/>'
             try:
                 

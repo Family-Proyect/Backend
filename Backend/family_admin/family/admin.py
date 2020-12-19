@@ -4,7 +4,7 @@ from .models import UserProfile
 from .models import *
 
 # Register your models here.
-admin.site.register(UserProfile, UserAdmin)
+admin.site.register(UserProfile)
 admin.site.register(Tema)
 admin.site.register(Imagenes_Tema)
 admin.site.register(Videos_Tema)

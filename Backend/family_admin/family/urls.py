@@ -17,6 +17,13 @@ api_patterns = [
     path('get_consejerias/',get_Consejerias),
     path('register/',register),
     path('tips/',get_tips),
+    path('send_testimonios/',post_testimonios),
+    path('get_testimonios/',get_testimonios),
+    path('get_profile/', get_profile),
+    path('update_profile/', update_profile),
+    path('update_password/', update_password),
+
+    path('updateImage/', update_image_profile),
 
 
     path('login/',login),
@@ -33,7 +40,7 @@ urlpatterns = [
      path('signup', signup, name='signup'),
      path('logout', logout_view, name='logout'),
      path('recuperar-password', forgot_password,name='password'),#template
-     path('recuperar_contrasenia', recuperar_contrasenia,name='reset_pass'),#method
+     path('recuperar_contrasenia_admin', recuperar_contrasenia_admin,name='reset_pass_admin'),#method
      #tema
      path('tema', vista_registrar_tema, name='registrar_tema'),
      path('tema_modificar', view_modificar_tema, name='modificar_tema'),
@@ -54,6 +61,13 @@ urlpatterns = [
      path('response_msg', send_email, name='response_contact'),
      path('eliminar_msg', eliminar_mensaje_buzon, name='eliminar_mensaje'),
      path('eliminar_consejeria', eliminar_consejeria, name='eliminarConsejeria'),
+
+    #testimonios
+    path('eliminar_testimonio', eliminar_testimonios, name='eliminarTestimonio'),
+     path('eliminar_testimonio_pk', eliminar_testimonio_p, name='eliminar_testimonio_p'),
+
+    
+
 
     #consejeria
      path('consjeria', vista_registrar_consejeria, name='registrar_consejeria'),

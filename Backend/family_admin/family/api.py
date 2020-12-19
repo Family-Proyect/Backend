@@ -29,6 +29,78 @@ def get_tips(request):
         tips = Tips.objects.filter(estado=1).order_by('-fecha')
         return JsonResponse(list(tips.values()),safe=False)
 
+def get_profile(request):
+    if request.method == 'GET':
+        user= request.GET.get("id")
+        #response = json.loads(request.body)
+        #profile= UserProfile.objects.get(username=response['user'])
+        profile= UserProfile.objects.filter(username=user)
+        print(profile.values())
+        dic = dict()
+        lista = list()
+        for i in profile:
+            dic['Nombre']=i.first_name
+            dic['Apellido']=i.last_name
+            dic['Email']=i.email
+            dic['Edad']=i.edad
+            dic['Username']=i.username
+            dic['Sexo']='Masculino'
+            dic['Image']=i.image.url
+
+            lista.append(dic)
+        return JsonResponse(dic,safe=False)
+
+@csrf_exempt
+def update_profile(request):
+    print(request)
+    print(json.loads(request.body))
+    if request.method=="POST":
+        response = json.loads(request.body)
+        print(response)
+        try:
+            profile= UserProfile.objects.filter(username=response['user'])[0]
+            profile.first_name= response['nombre']
+            profile.last_name= response['apellido']
+            profile.edad= response['edad']
+            print(response['edad'])
+            profile.email= response['email']
+            profile.save()
+        except Exception as e:
+            print(e)
+        print(response)
+        return HttpResponse(status=200)
+    return HttpResponse(status=404)
+
+@csrf_exempt
+def update_password(request):
+    if request.method=="POST":
+        response = json.loads(request.body)
+        print(response)
+        try:
+            profile= UserProfile.objects.filter(username=response['user'])[0]
+            profile.set_password(response['password'])  # replace with your real password
+            print(response['password'])
+            profile.save()
+        except Exception as e:
+            print(e)
+        print(response)
+        return HttpResponse(status=200)
+    return HttpResponse(status=404)
+
+@csrf_exempt
+def update_image_profile(request):
+    if request.method=="POST":
+        print(request.POST['user'])
+        print(request.FILES['file'])
+        try:
+            profile= UserProfile.objects.filter(username=request.POST['user'])[0]
+            profile.image= request.FILES['file']
+            profile.save()
+        except Exception as e:
+            print(e)
+        return HttpResponse(status=200)
+    return HttpResponse(status=404)
+   
 
 def get_temasPrincipales(request):
     if request.method=='GET':
@@ -51,8 +123,12 @@ def get_temasPrincipales(request):
                 res['image']=imagen.image.url
                 temas_recientes.append(res)
         print(temas_recientes)
-
         return JsonResponse(temas_recientes,safe=False)
+
+def get_testimonios(request):
+    if request.method=='GET':
+        testimonios = Testimonios.objects.all().values()
+        return JsonResponse(list(testimonios),safe=False)
 
 def get_categorias(request):
     if request.method=='GET':
@@ -140,7 +216,19 @@ def post_contactanos(request):
         return HttpResponse(status=200)
     return HttpResponse(status=404)
 
-
+@csrf_exempt
+def post_testimonios(request):
+    if request.method=="POST":
+        response = json.loads(request.body)
+        try:
+            testimonio= Testimonios(usuario=response['name'],titulo=response['title'],
+            descripcion=response['description'],estado=0)
+            testimonio.save()
+        except Exception as e:
+            print(e)
+        print(response)
+        return HttpResponse(status=200)
+    return HttpResponse(status=404)
 
 #API de Servicios de sugerencias
 @csrf_exempt
