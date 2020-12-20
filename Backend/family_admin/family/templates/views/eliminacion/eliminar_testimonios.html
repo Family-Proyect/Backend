@@ -60,8 +60,8 @@
                         <td><a href="#" class="btn btn-success btn-circle btn-sm">
                                 <i class="fas fa-pen"></i>
                             </a>
-                            <button class="btn btn-success btn-circle btn-sm " type="button" data-titulo="{{testimonio.titulo}}"
-                            data-mensaje="{{testimonio.descripcion}}" data-testimonio="{{testimonio.id}}"
+                            <button class="btn btn-success btn-circle btn-sm " type="button"  data-titulo="{{testimonio.titulo}}"
+                            data-mensaje="{{testimonio.descripcion}}" data-id="{{testimonio.id}}"
                                 href="" data-toggle="modal" data-target="#exampleModal">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -118,11 +118,13 @@
           </button>
         </div>
         <div class="modal-body">
-          <form action="{% url 'response_contact' %}" method="POST">
+          <form action="{% url 'response_testimonio' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Tiulo:</label>
                 <input type="text" class="form-control" id="titulo" name="titulo" required>
+                <input type="hidden" class="form-control" id="id_testimonio" name="id_testimonio" required>
+
             </div>
             <div class="form-group row">
                 <label class="col-md-12 col-form-label" for="estado">Estado del tema</label>
@@ -163,9 +165,13 @@
                 var button = $(event.relatedTarget)
                 var titulo_modal = button.data('titulo')
                 var mensaje_modal = button.data('mensaje')
+                var id_testimonio = button.data('id')
+
                 var modal = $(this)
                 modal.find('.modal-body #titulo').val(titulo_modal);
                 modal.find('.modal-body #mensaje').val(mensaje_modal);
+                modal.find('.modal-body #id_testimonio').val(id_testimonio);
+
 
             });
         });

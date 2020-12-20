@@ -65,6 +65,7 @@ urlpatterns = [
     #testimonios
     path('eliminar_testimonio', eliminar_testimonios, name='eliminarTestimonio'),
      path('eliminar_testimonio_pk', eliminar_testimonio_p, name='eliminar_testimonio_p'),
+     path('validar_testimonio', validarTestimonio, name='response_testimonio'),
 
     
 
