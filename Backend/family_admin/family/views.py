@@ -438,7 +438,13 @@ def send_email(request):
         return redirect('buzon_entrada')
     return redirect('buzon_entrada')
 
-
+def validarTestimonio(request):
+    if request.method == 'POST':
+        id_testi = request.POST['id_testimonio']
+        testi = Testimonios.objects.get(id=id_testi)
+        testi.estado=request.POST['estado']
+        testi.save()
+    return redirect('eliminarTestimonio')
 
 
 def notificaciones(informacion):
