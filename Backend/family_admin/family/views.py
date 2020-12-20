@@ -20,6 +20,17 @@ def view_eliminar_galeria(request):
     print(imagenes)
     return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
 
+def view_registrar_nosotros(request):
+    if request.method == 'POST':
+        try:
+            nosotros = Nosotros(nombre_completo=request.POST['nombre'],estudios=request.POST['estudio'],image=request.FILES['image'])
+            nosotros.save()
+            messages.add_message(request, messages.SUCCESS, 'Registrado exitosamente.')
+        except Exception as e:
+            print(e)
+            messages.add_message(request,messages.ERROR,'Error al registrar.')
+            return redirect('registrar_nosotros')
+    return render(request, 'views/registros/registrar_nosotros.html')
 
 
 @login_required(login_url='/')

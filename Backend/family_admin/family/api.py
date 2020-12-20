@@ -130,6 +130,11 @@ def get_testimonios(request):
         testimonios = Testimonios.objects.filter(estado=1).order_by('-fecha').values()       
         return JsonResponse(list(testimonios),safe=False)
 
+def get_nosotros(request):
+    if request.method=='GET':
+        nosotros = Nosotros.objects.all().values()       
+        return JsonResponse(list(nosotros),safe=False)
+
 def get_categorias(request):
     if request.method=='GET':
         cetegorias = Categoria_Tema.objects.all().values()

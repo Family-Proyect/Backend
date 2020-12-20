@@ -24,6 +24,7 @@ api_patterns = [
     path('update_password/', update_password),
 
     path('updateImage/', update_image_profile),
+    path('getNosotros/',get_nosotros ),
 
 
     path('login/',login),
@@ -74,6 +75,10 @@ urlpatterns = [
      path('consjeria', vista_registrar_consejeria, name='registrar_consejeria'),
      path('modificar_consejeria', vista_modificar_consejeria, name='modificarConsejeria'),
      path('modificar_consejeria_dates', modificar_consejeria, name='moodifyconsejeria'),
+
+     #Nosotros
+     path('nosotros', view_registrar_nosotros, name='registrar_nosotros'),
+
 
 
      path('recibir_imagenes', recibir_imagenes),
