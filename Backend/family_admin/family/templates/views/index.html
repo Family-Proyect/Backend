@@ -120,7 +120,6 @@
         <h6 class="collapse-header">Eliminar:</h6>
         <a class="collapse-item" href="{% url 'eliminar_tema' %}">Eliminar tema</a>
         <a class="collapse-item" href="{% url 'eliminar_tips' %}">Eliminar tips</a>
-        <a class="collapse-item" href="{% url 'eliminarTestimonio' %}">Eliminar testimonios</a>
 
         
         <!-- <a class="collapse-item" href="cards.html">Eliminar galeria</a> -->
@@ -153,6 +152,19 @@
             <h6 class="collapse-header">Consejerias:</h6>
             <a class="collapse-item" href="{% url 'registrar_consejeria' %}">Registrar consejeria</a>
             <a class="collapse-item" href="{% url 'modificarConsejeria' %}">Gestionar consejeria</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTestimonio" aria-expanded="true" aria-controls="collapseTestimonio">
+          <i class="fas fa-comment-alt"></i>        
+            <span>Testimonios</span>
+        </a>
+        <div id="collapseTestimonio" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Testimonios:</h6>
+            <a class="collapse-item" href="{% url 'eliminarTestimonio' %}">Gestionar testimonios</a>
+
           </div>
         </div>
       </li>
