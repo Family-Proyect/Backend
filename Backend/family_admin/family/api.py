@@ -127,7 +127,7 @@ def get_temasPrincipales(request):
 
 def get_testimonios(request):
     if request.method=='GET':
-        testimonios = Testimonios.objects.all().values()
+        testimonios = Testimonios.objects.filter(estado=1).order_by('-fecha').values()       
         return JsonResponse(list(testimonios),safe=False)
 
 def get_categorias(request):
