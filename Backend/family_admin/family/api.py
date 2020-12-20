@@ -263,7 +263,7 @@ def login(request):
         if(username!=None and password!=None):
             usuario = authenticate(username=username, password=password)
             if(usuario):
-                return JsonResponse({"status":"true"}, safe=False)
+                return JsonResponse({"status":"true","usuario":usuario.first_name+" "+usuario.last_name}, safe=False)
             else:
                 return JsonResponse({"status":"false"}, safe=False)
             return HttpResponse(status=404)
