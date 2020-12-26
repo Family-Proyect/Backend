@@ -45,7 +45,7 @@ def get_profile(request):
             dic['Edad']=i.edad
             dic['Username']=i.username
             dic['Sexo']='Masculino'
-            dic['Image']=i.image.url
+            #dic['Image']=i.image.url
 
             lista.append(dic)
         return JsonResponse(dic,safe=False)
@@ -268,7 +268,7 @@ def login(request):
         if(username!=None and password!=None):
             usuario = authenticate(username=username, password=password)
             if(usuario):
-                return JsonResponse({"status":"true","usuario":usuario.first_name+" "+usuario.last_name}, safe=False)
+                return JsonResponse({"status":"true","usuario":usuario.first_name+" "+usuario.last_name,"username":usuario.username}, safe=False)
             else:
                 return JsonResponse({"status":"false"}, safe=False)
             return HttpResponse(status=404)
