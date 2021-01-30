@@ -133,7 +133,7 @@ def vista_registrar_consejeria(request):
 
 @login_required(login_url='/')
 def vista_modificar_consejeria(request):
-    consejeria = Consejeria.objects.all().filter(estado=1)
+    consejeria = Consejeria.objects.all()
     return render(request, 'views/modificaciones/modificar_consejeria.html',{'consejerias':consejeria})
 
 @login_required(login_url='/')
@@ -152,6 +152,10 @@ def modificar_consejeria(request):
 @login_required(login_url='/')
 def eliminar_consejeria(request):
     con = Consejeria.objects.get(id=request.POST['id_consejeria'])
+    user= UserProfile.objects.get(username=con.consejeria_user)
+    user.consejeria=""#renicio la consejeria del usuario
+    user.estado=0
+    user.save()
     con.delete()
     return redirect('modificarConsejeria')
 
@@ -240,7 +244,7 @@ def modificar_tema(request,pk):
             tema.titulo= request.POST['titulo']
             tema.descripcion=request.POST['descripcion']
             if request.POST.get('categoria')!=None:
-                tema.tema_categoria= request.POST.get('categoria')
+                tema.tema_categoria= Categoria_Tema.objects.get(nombre_categoria=request.POST.get('categoria'))
                 print("cate->",request.POST['categoria'])
             if request.POST['fecha']!="":
                 tema.fecha=request.POST['fecha']

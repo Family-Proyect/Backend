@@ -43,7 +43,6 @@ def get_profile(request):
         #response = json.loads(request.body)
         #profile= UserProfile.objects.get(username=response['user'])
         profile= UserProfile.objects.filter(username=user)
-        print(profile.values())
         dic = dict()
         lista = list()
         for i in profile:
@@ -56,6 +55,11 @@ def get_profile(request):
             if(i.image != ''):
                 dic['Image']=i.image.url
             dic['consejeria']=i.consejeria
+            dic['estado']=i.estado
+            if i.estado==1:
+                consejeria=Consejeria.objects.get(consejeria_user=i.username)
+                dic['inicio']=consejeria.empieza
+                dic['termina']=consejeria.termina
             lista.append(dic)
         return JsonResponse(dic,safe=False)
 
@@ -237,6 +241,7 @@ def post_solicitar_consejeria(request):
         try:
             consejeria = Consejeria.objects.get(id=response['id'])
             consejeria.estado=0
+            consejeria.consejeria_user=response['username']
             consejeria.save()
             user = UserProfile.objects.get(username=response['username'])
             user.consejeria=consejeria.correo
