@@ -126,7 +126,8 @@ def vista_registrar_consejeria(request):
     if request.method == 'POST':
         username = None
         username = request.user.username
-        consejeria = Consejeria(tema=request.POST['tema'],usuario=username,correo="chjoguer",empieza=request.POST['inicio'],termina=request.POST['termina'])
+        consejeria = Consejeria(tema=request.POST['tema'],usuario=username,correo=request.POST['link']
+        ,empieza=request.POST['inicio'],termina=request.POST['termina'])
         consejeria.save()
     return render(request, 'views/registros/registrar_consejeria.html')
 
@@ -151,15 +152,13 @@ def modificar_consejeria(request):
 @login_required(login_url='/')
 def eliminar_consejeria(request):
     con = Consejeria.objects.get(id=request.POST['id_consejeria'])
-    con.estado=0
-    con.save()
+    con.delete()
     return redirect('modificarConsejeria')
 
 @login_required(login_url='/')
 def eliminar_mensaje_buzon(request):
     msg = Contactanos.objects.get(id=request.POST['id_mensaje'])
-    msg.estado=0
-    msg.save()
+    msg.delete()
     return redirect('buzon_entrada')
 
 

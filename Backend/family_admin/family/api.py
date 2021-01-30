@@ -53,8 +53,9 @@ def get_profile(request):
             dic['Edad']=i.edad
             dic['Username']=i.username
             dic['Sexo']='Masculino'
-            dic['Image']=i.image.url
-
+            if(i.image != ''):
+                dic['Image']=i.image.url
+            dic['consejeria']=i.consejeria
             lista.append(dic)
         return JsonResponse(dic,safe=False)
 
@@ -228,6 +229,25 @@ def post_contactanos(request):
         print(response)
         return HttpResponse(status=200)
     return HttpResponse(status=404)
+
+@csrf_exempt
+def post_solicitar_consejeria(request):
+    if request.method=="POST":
+        response = json.loads(request.body)
+        try:
+            consejeria = Consejeria.objects.get(id=response['id'])
+            consejeria.estado=0
+            consejeria.save()
+            user = UserProfile.objects.get(username=response['username'])
+            user.consejeria=consejeria.correo
+            user.estado=1
+            user.save()
+        except Exception as e:
+            print(e)
+        print(response)
+        return HttpResponse(status=200)
+    return HttpResponse(status=404)
+
 
 @csrf_exempt
 def post_testimonios(request):

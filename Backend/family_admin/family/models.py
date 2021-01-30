@@ -15,7 +15,8 @@ class UserProfile(AbstractUser):
     sexo = models.CharField(max_length=100,null=False,blank=True)# A:administrador, E: editor, C: consejero
     edad = models.CharField(max_length=100,null=False,blank=True )# A:administrador, E: editor, C: consejero
     image = models.ImageField(upload_to='image/',null=False,blank=True,verbose_name="Imagen del perfil")
-
+    consejeria=models.CharField(max_length=150,default=None,null=True,blank=True )
+    estado = models.SmallIntegerField(default=0)
     def say_hello(self):
         return "Hello, my name is {}".format(self.first_name)
     
@@ -107,6 +108,7 @@ class Consejeria(models.Model):
     tema = models.CharField(max_length=100,null=False,blank=False)
     correo = models.CharField(max_length=150,null=False,blank=False)
     estado= models.SmallIntegerField(default=1)
+    consejeria_user = models.CharField(max_length=200,default=None,null=True,blank=True)
 
 class Nosotros(models.Model):
     nombre_completo =models.CharField(max_length=350,null=False,blank=False)

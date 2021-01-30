@@ -6,6 +6,7 @@ from rest_framework_simplejwt import views as jwt_views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 api_patterns = [
+    path('agendar_consejeria/',post_solicitar_consejeria),
     path('getPoliticas/',get_politicas),
     path('categorias_temas/',get_categorias),
     path('tema_by_id/',get_temaByID),
