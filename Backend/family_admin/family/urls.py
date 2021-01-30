@@ -6,6 +6,7 @@ from rest_framework_simplejwt import views as jwt_views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 api_patterns = [
+    path('getPoliticas/',get_politicas),
     path('categorias_temas/',get_categorias),
     path('tema_by_id/',get_temaByID),
     path('tema_by_category/',get_temaByCategory),
@@ -78,7 +79,14 @@ urlpatterns = [
 
      #Nosotros
      path('nosotros', view_registrar_nosotros, name='registrar_nosotros'),
+     path('eliminar_nosotros', eliminar_nosotros, name='eliminarNosotros'),
+     path('eliminar_nosotros_pk', eliminar_nosotros_p, name='eliminar_nosotros_p'),
+     path('modificiar_nosotros', view_modificar_nosotros, name='modificar_nosotros'),
+     path('nosotros_modificar/<int:pk>', modificar_nosotros, name='modificar_nosotros_pk'),
 
+
+    #politicas
+     path('politicas', view_politicas, name='politicas_view'),
 
 
      path('recibir_imagenes', recibir_imagenes),

@@ -39,13 +39,70 @@ def eliminar_galeria(request):
     image = Imagenes_galeria.objects.get(id=request.POST['galeria_id'])   #solo hay una galeria
     image.delete()
     return redirect('hola')
+@csrf_exempt
+@login_required(login_url='/')
+def view_politicas(request):
+    politicas = Politicas.objects.all()[0]
+    print(politicas)
+    if request.method == 'POST':
+        try:
+            politicas = Politicas.objects.all()[0]
+            politicas.descripcion= request.POST['descripcion']
+            politicas.save()
+            messages.add_message(request, messages.SUCCESS, 'Cambio exitoso.')
+        except Exception as e:
+            print("Error ->", e)
+            messages.add_message(request, messages.ERROR, 'No se pudo realizar la modificacion.')
+        return redirect('politicas_view')
+
+    return render(request, 'views/modificaciones/modificar_politicas.html',{'politicas':politicas})
 
    #return render(request, 'views/galeria/eliminar_galeria.html',{'imagenes':imagenes})
+@login_required(login_url='/')
+def view_modificar_nosotros(request):
+    All_nosotros = Nosotros.objects.all()
+    return render(request, 'views/modificaciones/modificar_nosotros.html',{'nosotros':All_nosotros})
+
+@csrf_exempt
+@login_required(login_url='/')
+def modificar_nosotros(request,pk):
+    All_nosotros = Nosotros.objects.all()
+    try:
+        nosotros = Nosotros.objects.get(id=pk)
+        if request.method == 'POST':
+            nosotros.nombre_completo= request.POST['nombres']
+            nosotros.estudios=request.POST['estudios']
+        #Verifico si envian imagen, si existe procedo a guardar            
+            if bool(request.FILES.get('imagen1')) == True :
+                print("img1")
+                nosotros.image=request.FILES['imagen1']
+            nosotros.save()
+            messages.add_message(request, messages.SUCCESS, 'Modificacion exitosa.')
+        return render(request, 'views/modificaciones/modificar_nosotros.html',{'nosotros':All_nosotros,'user_nosotros':nosotros})
+    except Exception as e:
+        print("Error ->", e)
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la modificacion.')
+    return render(request, 'views/modificaciones/modificar_nosotros.html',{'nosotros':All_nosotros})
 
 @login_required(login_url='/')
 def eliminar_testimonios(request):
     testimonios = Testimonios.objects.all() #solo hay una galeria
     return render(request, 'views/eliminacion/eliminar_testimonios.html',{'testimonios':testimonios})
+
+@login_required(login_url='/')
+def eliminar_nosotros(request):
+    nosotros = Nosotros.objects.all() #solo hay una galeria
+    return render(request, 'views/eliminacion/eliminar_nosotros.html',{'nosotros':nosotros})
+@login_required(login_url='/')
+def eliminar_nosotros_p(request):
+    try:
+        nosotros = Nosotros.objects.get(id=request.POST['nosotros'])
+        nosotros.delete()
+        messages.add_message(request, messages.SUCCESS, 'Nosotros user eliminado exitosamente.')
+    except Exception as e:
+        print(e)
+        messages.add_message(request,messages.ERROR,'Error al eliminar el nostros user.')
+    return redirect('eliminarNosotros')
 
 @login_required(login_url='/')
 def eliminar_testimonio_p(request):

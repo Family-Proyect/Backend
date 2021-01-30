@@ -121,6 +121,7 @@
         <h6 class="collapse-header">Eliminar:</h6>
         <a class="collapse-item" href="{% url 'eliminar_tema' %}">Eliminar tema</a>
         <a class="collapse-item" href="{% url 'eliminar_tips' %}">Eliminar tips</a>
+        <a class="collapse-item" href="{% url 'eliminar_nosotros' %}">Eliminar nosotros</a>
 
         
         <!-- <a class="collapse-item" href="cards.html">Eliminar galeria</a> -->
@@ -165,7 +166,19 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Testimonios:</h6>
             <a class="collapse-item" href="{% url 'eliminarTestimonio' %}">Gestionar testimonios</a>
-
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoPolitcs" aria-expanded="true" aria-controls="collapseTwoPolitcs">
+          <i class="fas fa-edit"></i>
+          <span>Gestionar Políticas</span>
+        </a>
+        <div id="collapseTwoPolitcs" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Gestionar:</h6>
+            <a class="collapse-item" href="{% url 'politicas_view' %}">Políticas & Privacidad</a>
+       
           </div>
         </div>
       </li>

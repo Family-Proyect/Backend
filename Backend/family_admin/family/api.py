@@ -24,6 +24,14 @@ from django.contrib.auth import authenticate
 from django.core.mail import EmailMessage, BadHeaderError, send_mail, send_mass_mail
 
 
+def get_politicas(request):
+    if request.method=='GET':
+        politicas = Politicas.objects.all()[0]
+        dict_politics={}
+        dict_politics['Descripcion']=politicas.descripcion
+        return JsonResponse(dict_politics,safe=False)
+
+
 def get_tips(request):
     if request.method == 'GET':
         tips = Tips.objects.filter(estado=1).order_by('-fecha')
@@ -45,7 +53,7 @@ def get_profile(request):
             dic['Edad']=i.edad
             dic['Username']=i.username
             dic['Sexo']='Masculino'
-            #dic['Image']=i.image.url
+            dic['Image']=i.image.url
 
             lista.append(dic)
         return JsonResponse(dic,safe=False)

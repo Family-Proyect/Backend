@@ -114,4 +114,5 @@ class Nosotros(models.Model):
     image = models.ImageField(upload_to='image/',null=False,blank=True)
 
 
-
+class Politicas(models.Model):
+    descripcion=models.TextField(max_length=800,null=False,blank=True,default="Politicas de privacidad.")
