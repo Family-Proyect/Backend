@@ -14,3 +14,5 @@ Frontend: Angular V10
 Backend: Django
 Movil: Ionic
 ```
+
+
